@@ -13,7 +13,6 @@ typedef struct Book {
     int id;                 // Mã sách (Khóa)
     char title[100];        // Tên sách
     char author[50];        // Tác giả
-    int price;              // Giá tiền
     BookStatus status;      // Trạng thái: AVAILABLE hoặc BORROWED
 } Book;
 
@@ -23,3 +22,11 @@ typedef struct TreeNode {
     struct TreeNode* left;  
     struct TreeNode* right; 
 } TreeNode;// 
+
+// 22/7 
+// Khiet kiem du lieu dau vao
+// Bin tùm cach đọc file 
+// Thanh biên dịch file C
+// Khiet làm 2 hàm xóa, tạo
+// Thanh làm 2 hàm thêm, tìm kiếm
+// Bin viết ham xuất file 
