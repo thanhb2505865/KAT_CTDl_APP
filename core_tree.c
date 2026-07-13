@@ -30,3 +30,4 @@ typedef struct TreeNode {
 // Khiet làm 2 hàm xóa, tạo
 // Thanh làm 2 hàm thêm, tìm kiếm
 // Bin viết ham xuất file 
+// Lamf chuaw
