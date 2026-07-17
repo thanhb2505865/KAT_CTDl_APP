@@ -26,10 +26,10 @@ struct Node{
 
 typedef struct Node* Tree;
 // 22/7 
-// Khiet kiem du lieu dau vao kiểu .dat => Bắt buộc phải có hàm xuất file vì không đọc chay file gốc đc  tên: database.dat
-// Khiet làm 2 hàm xóa, tạo
-// Thanh làm 2 hàm thêm, tìm kiếm
-// Bin viết ham xuất file 
+// Khiet kiem du lieu dau vao kiểu .dat => Bắt buộc phải có hàm xuất file vì không đọc chay file gốc đc  tên: database.dat.
+// Khiet làm 2 hàm xóa, tạo(book) để cho A bin thêm vô 
+// Thanh làm tìm kiếm, load_database, save_database
+// Bin viết ham xuất file, thêm Tree
 
 
 
