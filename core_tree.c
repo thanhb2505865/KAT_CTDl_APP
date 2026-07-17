@@ -102,41 +102,14 @@ void save_database(Tree T) {
 Tree sreachid(int x, Tree Root) {
     if (Root == NULL) return NULL;
     else {
-        if(Root->data.id == x) {
-            return Root;
+        if(x.id > Root->data.id) {
+            Search(x, Root->right);
         }
-        else {
-            if(x > Root->data.id) {
-                return sreachid(x, Root->right);
-            }
-            else if (x < Root->data.id) {
-                return sreachid(x, Root->left);
-            }
+        else if((x.id < Root->data.id) ){
+            Search(x, Root->left);
         }
-    }
-}
-
-// Hàm tìm kiếm trạng thái của sách. Nếu sách còn trong thư viện trả về 1. Ngược lại trả về 0
-int search_status(Tree T) {
-    return T->data.status == AVAILABLE;
-}
-
-void Search() {
-    int x; 
-    printf("Vui long nhap ID sách bạn muốn tìm kiếm: ");
-    scanf(" %d", &x);
-    Tree temp = lood_database();
-    Tree test = (sreachid(x, temp));
-    if (test == NULL) {
-        printf("Cuốn sách bạn kiếm không có trong thư viện của tôi. Xin lỗi bạn!\n");
-        return;
-    }
-    else{
-        if(search_status(test)) {
-            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
-            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
-            printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Trong kho sẵn sàng");
+        else{
+            return;
         }
         else {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
