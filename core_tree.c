@@ -13,6 +13,7 @@ typedef struct Book {
     int id;                 // Mã sách (Khóa)
     char title[100];        // Tên sách
     char author[50];        // Tác giả
+    int year;               // Năm xuất bản
     BookStatus status;      // Trạng thái: AVAILABLE hoặc BORROWED
 } Book;
 
@@ -25,49 +26,128 @@ struct Node{
 
 typedef struct Node* Tree;
 // 22/7 
-// Khiet kiem du lieu dau vao
-// Bin tùm cach đọc file 
-// Thanh biên dịch file C
+// Khiet kiem du lieu dau vao kiểu .dat => Bắt buộc phải có hàm xuất file vì không đọc chay file gốc đc  tên: database.dat
 // Khiet làm 2 hàm xóa, tạo
 // Thanh làm 2 hàm thêm, tìm kiếm
 // Bin viết ham xuất file 
 
-void InsertBook(Book x, Tree* Root) { //Tree* = struct Node**
-    if(*Root == NULL) {
+
+
+// HÀM: insertbook
+// Tham số: Book x, Tree Root
+// Mục đích: Thêm Book x vào tham số Tree Root; Nếu có thì thêm , không thì trả về địa chỉ cây Root
+// Đầu ra   : Trả về địa chỉ của cây tham số Root sao khi gắn book vào 
+Tree insertbook(Book x, Tree Root) { 
+    if(Root == NULL) {
         Tree New = (Tree)malloc(sizeof(struct Node));
         x.status = AVAILABLE;
         New->data = x;
         New->left = NULL;
         New->right = NULL;
-        *Root = New;
+        Root = New;
     }
-    else {
-        if(x.id > (*Root)->data.id) {
-            InsertBook(x, &(*Root)->right);
-        }
-        else if((x.id < (*Root)->data.id) ){
-            InsertBook(x, &(*Root)->left);
-        }
-        else{
-            return;
-        }
-    }
-}
-
-Tree Search(Book x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh chua hieu ham search
-    if (Root == NULL) return NULL; // Truong hop tim khong thay x
     else {
         if(x.id > Root->data.id) {
-            Search(x, Root->right);
+            Root->right = insertbook(x, Root->right);
         }
         else if((x.id < Root->data.id) ){
-            Search(x, Root->left);
+            Root->left = insertbook(x, Root->left);
         }
         else{
-            return;
+            return Root;
         }
     }
 }
 
-// Lamf chuaw
+// HÀM: readBook
+// Tham số: Tree T
+//        : FILE* f
+// Mục đích: Ghi lại giá trị của từng Node Book được duyệt theo tiền tự của cây tránh việc khi sắp dữ liệu file lên cây trên Ram thành cây liên kết 
+void readBook(Tree T, FILE* f) {
+    if(T == NULL) return;
+    else {
+        fwrite(&T->data, sizeof(Book), 1, f);
+        readBook(T->left, f);
+        readBook(T->right, f);
+    }
+}
 
+// HÀM: lood_database
+// Mục đích: Duyệt từ file để lấy từ Book làm nguồn cho hàm insertbook để trả về cây
+// Đầu ra: Tree result sao khi dữ liệu trên file được đọc đưa lên cây
+Tree lood_database() {
+    Tree result = NULL;
+    FILE* f = fopen("database.dat", "rb");
+    Book temp;
+    while(fread(&temp, sizeof(Book), 1, f) == 1) {
+        result = insertbook(temp, result);
+    }
+    fclose(f);
+    return result;
+}
+
+// HÀM: save_database
+// Tham số: Tree T
+// Mục đích: Đem dữ liệu từ Tree T trả về cho file
+// Đầu ra: Tree result sao khi dữ liệu trên file được đọc đưa lên cây
+void save_database(Tree T) {
+    FILE* f = fopen("database.dat", "wb");
+    if(T == NULL) return;
+    else {
+        readBook(T, f);
+    }
+    fclose(f);
+}
+
+Tree sreachid(int x, Tree Root) {
+    if (Root == NULL) return NULL;
+    else {
+        if(Root->data.id == x) {
+            return Root;
+        }
+        else {
+            if(x > Root->data.id) {
+                return sreachid(x, Root->right);
+            }
+            else if (x < Root->data.id) {
+                return sreachid(x, Root->left);
+            }
+        }
+    }
+}
+
+// Hàm tìm kiếm trạng thái của sách. Nếu sách còn trong thư viện trả về 1. Ngược lại trả về 0
+int search_status(Tree T) {
+    return T->data.status == AVAILABLE;
+}
+
+void Search() {
+    int x; 
+    printf("Vui long nhap ID sách bạn muốn tìm kiếm: ");
+    scanf(" %d", &x);
+    Tree temp = lood_database();
+    Tree test = (sreachid(x, temp));
+    if (test == NULL) {
+        printf("Cuốn sách bạn kiếm không có trong thư viện của tôi. Xin lỗi bạn!\n");
+        return;
+    }
+    else{
+        if(search_status(test)) {
+            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
+            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("----------------------------------------------------------------------------------\n");
+            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Trong kho sẵn sàng");
+        }
+        else {
+            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
+            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("----------------------------------------------------------------------------------\n");
+            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Đang mượn");
+        }
+    }
+}
+
+
+int main() {
+    
+}
