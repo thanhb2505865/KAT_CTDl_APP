@@ -58,10 +58,10 @@ Tree Search(Book x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh c
     if (Root == NULL) return NULL; // Truong hop tim khong thay x
     else {
         if(x.id > Root->data.id) {
-            Search(x, Root->right);
+            return Search(x, Root->right);
         }
         else if((x.id < Root->data.id) ){
-            Search(x, Root->left);
+            return Search(x, Root->left);
         }
         else{
             return;
