@@ -99,17 +99,44 @@ void save_database(Tree T) {
     fclose(f);
 }
 
-Tree sreachid(int x, Tree Root) {
-    if (Root == NULL) return NULL;
+
+Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh chua hieu ham search
+    if (Root == NULL) return NULL; // Truong hop tim khong thay x
     else {
-        if(x.id > Root->data.id) {
-            Search(x, Root->right);
+        if(Root->data.id == x) {
+            return Root;
         }
-        else if((x.id < Root->data.id) ){
-            Search(x, Root->left);
+        else {
+            if(x > Root->data.id) {
+                return Search(x, Root->right);
+            }
+            else if (x < Root->data.id) {
+                return Search(x, Root->left);
+            }
         }
-        else{
-            return;
+    }
+}
+
+// Hàm trả về trạng thái của sách. Chưa mượn trả về 1; Đã mượn trả về 0
+int search_status(Tree T) {
+    return T->data.status == AVAILABLE;
+}
+
+void search() {
+    int x;
+    printf("Vui lòng nhập id cuốn sách bạn tìm kiếm: ");
+    scanf(" %d", &x);
+    Tree result = lood_database();
+    Tree test = search_id(x, result);
+    if (test == NULL) {
+        printf("Không tìm thấy cuốn sách có mã số ID");
+    }
+    else {
+        if(search_status(test)) {
+            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
+            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("----------------------------------------------------------------------------------\n");
+            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Trong kho sẵn sàng");
         }
         else {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
@@ -119,7 +146,6 @@ Tree sreachid(int x, Tree Root) {
         }
     }
 }
-
 
 int main() {
     
