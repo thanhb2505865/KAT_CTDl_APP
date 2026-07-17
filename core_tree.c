@@ -31,6 +31,7 @@ typedef struct Node* Tree;
 // Khiet làm 2 hàm xóa, tạo
 // Thanh làm 2 hàm thêm, tìm kiếm
 // Bin viết ham xuất file 
+
 void InsertBook(Book x, Tree* Root) { //Tree* = struct Node**
     if(*Root == NULL) {
         Tree New = (Tree)malloc(sizeof(struct Node));
@@ -67,3 +68,6 @@ Tree Search(Book x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh c
         }
     }
 }
+
+// Lamf chuaw
+
