@@ -32,7 +32,6 @@ typedef struct Node* Tree;
 // Bin viết ham xuất file, thêm Tree
 
 
-
 // HÀM: insertbook
 // Tham số: Book x, Tree Root
 // Mục đích: Thêm Book x vào tham số Tree Root; Nếu có thì thêm , không thì trả về địa chỉ cây Root
@@ -59,6 +58,7 @@ Tree insertbook(Book x, Tree Root) {
     }
 }
 
+
 // HÀM: readBook
 // Tham số: Tree T
 //        : FILE* f
@@ -71,6 +71,8 @@ void readBook(Tree T, FILE* f) {
         readBook(T->right, f);
     }
 }
+
+////Bin nghĩ hàm load là hàm lood của Thanh á nên để ở txt cho dễ đọc với sửa
 
 // HÀM: lood_database
 // Mục đích: Duyệt từ file để lấy từ Book làm nguồn cho hàm insertbook để trả về cây
@@ -145,6 +147,64 @@ void search() {
             printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Đang mượn");
         }
     }
+}
+
+// Hàm duyệt cây in ra màn hình 
+void display_tree(Tree T) {
+    if (T != NULL) {
+        display_tree(T->left);
+        char* statusStr = (T->data.status == AVAILABLE) ? "San sang" : "Dang muon";
+        printf("%-5d | %-25s | %-18s | %-6d | %-10s\n", 
+               T->data.id, T->data.title, T->data.author, T->data.year, statusStr);
+        display_tree(T->right);
+    }
+}
+
+// Hàm xóa bộ nhớ đệm (tránh lỗi trôi lệnh khi dùng scanf xong dùng fgets)
+void clear_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+Tree them_sach_moi(Tree thu_vien) {
+    Book b;
+    printf("\n--- NHAP THONG TIN SACH MOI ---\n");
+    
+    printf("Nhap ID (Ma sach): "); 
+    scanf("%d", &b.id);
+    clear_buffer(); 
+    printf("Nhap ten sach: "); 
+    fgets(b.title, 100, stdin); 
+    b.title[strcspn(b.title, "\n")] = 0;
+    printf("Nhap tac gia: "); 
+    fgets(b.author, 50, stdin); 
+    b.author[strcspn(b.author, "\n")] = 0;
+    printf("Nhap nam xuat ban: "); 
+    scanf("%d", &b.year);
+    thu_vien = insertbook(b, thu_vien);
+    printf(">> Da them sach '%s' vao he thong thanh cong!\n", b.title);
+    return thu_vien;
+}
+
+// Hàm đệ quy duyệt cây Trung Tự (Trái - Gốc - Phải)
+void write_tree_to_file(Tree T, FILE* f) {
+    if (T != NULL) {
+        write_tree_to_file(T->left, f);
+        fprintf(f, "%d,%s,%s,%d\n", T->data.id, T->data.title, T->data.author, T->data.year);
+        write_tree_to_file(T->right, f);
+    }
+}
+
+// Hàm gọi chức năng xuất file
+void export_file(Tree T) {
+    FILE* f = fopen("DuLieuSach.txt", "w");
+    if(f == NULL) {
+        printf("Loi: Khong the tao hoac mo file DuLieuSach.txt!\n");
+        return;
+    }
+    write_tree_to_file(T, f);
+    fclose(f);
+    printf(">> Da xuat/luu toan bo du lieu ra file DuLieuSach.txt!\n");
 }
 
 int main() {
