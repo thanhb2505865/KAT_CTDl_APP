@@ -72,7 +72,7 @@ void readBook(Tree T, FILE* f) {
     }
 }
 
-////Bin nghĩ hàm load là hàm lood của Thanh á nên để ở txt cho dễ đọc với sửa
+
 
 // HÀM: lood_database
 // Mục đích: Duyệt từ file để lấy từ Book làm nguồn cho hàm insertbook để trả về cây
@@ -197,14 +197,14 @@ void write_tree_to_file(Tree T, FILE* f) { // Sẽ giống hàm
 
 // Hàm gọi chức năng xuất file
 void export_file(Tree T) {
-    FILE* f = fopen("DuLieuSach.txt", "w");
+    FILE* f = fopen("database.csv", "w");
     if(f == NULL) {
-        printf("Loi: Khong the tao hoac mo file DuLieuSach.txt!\n");
+        printf("Loi: Khong the tao hoac mo file database.csv!\n");
         return;
     }
     write_tree_to_file(T, f);
     fclose(f);
-    printf(">> Da xuat/luu toan bo du lieu ra file DuLieuSach.txt!\n");
+    printf(">> Da xuat/luu toan bo du lieu ra file database.csv!\n");
 }
 
 int main() {
