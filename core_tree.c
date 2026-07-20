@@ -187,7 +187,7 @@ Tree them_sach_moi(Tree thu_vien) {
 }
 
 // Hàm đệ quy duyệt cây Trung Tự (Trái - Gốc - Phải)
-void write_tree_to_file(Tree T, FILE* f) {
+void write_tree_to_file(Tree T, FILE* f) { // Sẽ giống hàm 
     if (T != NULL) {
         write_tree_to_file(T->left, f);
         fprintf(f, "%d,%s,%s,%d\n", T->data.id, T->data.title, T->data.author, T->data.year);
