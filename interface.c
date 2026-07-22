@@ -74,6 +74,7 @@ void drawMenu(int currentChoice) {
 }
 
 int main() {
+    Tree thu_vien = lood_database(); // Nạp dữ liệu từ database.dat lên cây
     int currentChoice = 0;
     int key;
 
@@ -127,8 +128,19 @@ int main() {
                     break;
 
                 case 5:
-                    printf("\n--- CHUC NANG: XOA SACH ---\n\n");
-                    break;
+                printf("\n--- CHUC NANG: XOA SACH KHOI HE THONG ---\n\n");
+                int deleteId;
+                printf(" Nhap Ma ID sach can xoa: ");
+                if (scanf("%d", &deleteId) == 1) {
+        // 1. Gọi hàm xóa sách khỏi Cây tìm kiếm nhị phân
+                    thu_vien = deleteBook(deleteId, thu_vien);
+        // 2. Cập nhật lại dữ liệu xuống file database.dat ngay lập tức
+                    save_database(thu_vien);
+                        printf("\n [Thong bao]: Thao tac xoa hoan tat va da cap nhat database.dat!\n");
+                    } else {
+                        printf("\n [Loi]: Ma ID nhap vao khong hop le!\n");}
+                clear_buffer(); // Xóa bộ đệm bàn phím
+                break;
 
                 case 6:
                     printf("\n  ==================================================\n");
