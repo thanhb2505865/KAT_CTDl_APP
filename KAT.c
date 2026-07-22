@@ -48,6 +48,7 @@ int main() {
                 case 4: //4. Sua thong tin sach
                     printf("\n--- CHUC NANG: SUA TEN SÁCH ---\n\n");
                     change_inf_book(thu_vien);
+                    save_database(thu_vien);
                     break;
 
                 case 5: //5. Xoa sach khoi he thong
@@ -71,7 +72,6 @@ int main() {
                     printf("  ==================================================\n");
                     return 0;
             }
-            
             setColor(8, 0);
             printf("\n\n [Bam phim bat ky de quay lai Menu chinh...]");
             getch();
