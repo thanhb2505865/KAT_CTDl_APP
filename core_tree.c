@@ -118,7 +118,60 @@ Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh
         }
     }
 }
+// HÀM BỔ TRỢ: Tìm Node có giá trị ID nhỏ nhất (nằm ngoài cùng bên trái của cây/phân nhánh)
+Tree findMin(Tree Root) {
+    if (Root == NULL) return NULL;
+    while (Root->left != NULL) {
+        Root = Root->left;
+    }
+    return Root;
+}
 
+// HÀM: deleteBook
+// Tham số: int id (mã sách cần xóa), Tree Root
+// Mục đích: Xóa một node sách theo id ra khỏi Cây Tìm Kiếm Nhị Phân
+// Đầu ra  : Trả về cây Root sau khi đã xóa node
+Tree deleteBook(int id, Tree Root) {
+    if (Root == NULL) {
+        printf("Khong tim thay sach co ID %d de xoa!\n", id);
+        return Root;
+    }
+
+    // 1. Tìm node cần xóa
+    if (id < Root->data.id) {
+        Root->left = deleteBook(id, Root->left);
+    } 
+    else if (id > Root->data.id) {
+        Root->right = deleteBook(id, Root->right);
+    } 
+    else {
+        // Đã tìm thấy node cần xóa (Root->data.id == id)
+
+        // TRƯỜNG HỢP 1 & 2: Node lá hoặc Node chỉ có 1 con
+        if (Root->left == NULL) {
+            Tree temp = Root->right;
+            free(Root);
+            return temp;
+        } 
+        else if (Root->right == NULL) {
+            Tree temp = Root->left;
+            free(Root);
+            return temp;
+        }
+
+        // TRƯỜNG HỢP 3: Node có 2 con
+        // Tìm node nhỏ nhất bên nhánh phải để đưa lên thế chỗ
+        Tree temp = findMin(Root->right);
+
+        // Sao chép dữ liệu của node thế chỗ vào node hiện tại
+        Root->data = temp->data;
+
+        // Xóa node thế chỗ cũ ở nhánh phải
+        Root->right = deleteBook(temp->data.id, Root->right);
+    }
+
+    return Root;
+}
 // Hàm trả về trạng thái của sách. Chưa mượn trả về 1; Đã mượn trả về 0
 int search_status(Tree T) {
     return T->data.status == AVAILABLE;
