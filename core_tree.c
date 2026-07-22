@@ -26,12 +26,6 @@ struct Node{
 
 typedef struct Node* Tree;
 
-// 22/7 
-// Khiet kiem du lieu dau vao kiểu .dat => Bắt buộc phải có hàm xuất file vì không đọc chay file gốc đc  tên: database.dat.
-// Khiet làm 2 hàm xóa, tạo(book) để cho A bin thêm vô 
-// Thanh làm tìm kiếm, load_database, save_database
-// Bin viết ham xuất file, thêm Tree
-
 // HÀM: readBook
 // Tham số: Tree T, FILE* f;
 // Mục đích: Đem dữ liệu từ cây trả về file 
@@ -81,6 +75,7 @@ Tree insertbook(Book x, Tree Root) {
         }
     }
 }
+
 // HÀM: lood_database
 // Mục đích: Đem dữ liệu từ file dựng thành cây trên Ram
 // Đầu ra: Tree result sao khi dữ liệu trên file được đọc đưa lên cây
@@ -181,7 +176,7 @@ void search() {
     Tree result = lood_database();
     Tree test = search_id(x, result);
     if (test == NULL) {
-        printf("Không tìm thấy cuốn sách có mã số ID");
+        printf("Khong tim thay cuon sach ca ma so ID");
         return;
     }
     else {
@@ -213,7 +208,7 @@ void change_inf_book(Tree thu_vien) {
         printf("Không tìm thấy cuốn sách có mã số ID\n");
     }
     else {
-        readbook(&virtual);
+        scanfbook(&virtual);
         thu_vien = insertbook(virtual, thu_vien);
         printf("Cap nhat du lieu sach thanh cong\n");
         char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
@@ -298,8 +293,4 @@ void export_file(Tree T) {
     write_tree_to_file(T, f);
     fclose(f);
     printf(">> Da xuat/luu toan bo du lieu ra file database.csv!\n");
-}
-
-int main() {
-    
 }
