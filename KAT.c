@@ -4,18 +4,18 @@
 #include "interface.c"
 #include "core_tree.c"
 
+// Video Bin
+// Word Khiết
+// Thiết kế xử lý các hàm xử lý thêm/xóa/tìm kiếm trên cấu trúc dữ liệu đã cài đặt (mã giả hoặc sơ đồ). Thanh 
+// 8/8
 
 int main() {
-    convertTxtToDat("database.txt", "database.dat");
     Tree thu_vien = lood_database(); // Nạp dữ liệu từ database.dat lên cây
     int currentChoice = 0;
     int key;
-
     hideCursor(); // Ẩn con trỏ đi cho đẹp
-
     while (1) {
         drawMenu(currentChoice);
-
         // Bắt sự kiện phím bấm
         key = getch();
         if (key == 0 || key == 224) { // Nếu là phím đặc biệt (Mũi tên)
@@ -30,13 +30,15 @@ int main() {
             
             switch (currentChoice + 1) {
                 case 1: // 1. Xem danh sach sach hien co
+                    printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
                     display_tree(thu_vien);
                     break;
 
                 case 2: //2. Them sach moi vao he thong
                     printf("\n--- CHUC NANG: THEM SACH MOI ---\n\n");
-                    insertnode(thu_vien);
+                    thu_vien = insertnode(thu_vien);
                     printf("\n [Thong bao]: Them thanh cong vao file .dat!\n");
+                    save_database(thu_vien);
                     break;
 
                 case 3: //3. Tim kiem sach theo Ma ID
@@ -47,7 +49,7 @@ int main() {
                     break;
 
                 case 4: //4. Sua thong tin sach
-                    printf("\n--- CHUC NANG: SUA TEN SÁCH ---\n\n");
+                    printf("\n--- CHUC NANG: SUA TEN SACH ---\n\n");
                     change_inf_book(thu_vien);
                     save_database(thu_vien);
                     break;

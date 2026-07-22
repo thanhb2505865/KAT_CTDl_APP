@@ -26,55 +26,60 @@ struct Node{
 
 typedef struct Node* Tree;
 
-
 int convertTxtToDat(const char *txtFileName, const char *datFileName) {
-    // 1. Mở file .txt để đọc (r) và file .dat để ghi nhị phân (wb)
     FILE *fTxt = fopen(txtFileName, "r");
     if (fTxt == NULL) {
-        printf("[Lỗi] Không thể mở file %s để đọc!\n", txtFileName);
-        return 0; // Thất bại
+        printf("[X] Lỗi: Không mở được file '%s'!\n", txtFileName);
+        return 0;
     }
 
     FILE *fDat = fopen(datFileName, "wb");
     if (fDat == NULL) {
-        printf("[Lỗi] Không thể tạo/mở file %s để ghi!\n", datFileName);
+        printf("[X] Lỗi: Không tạo được file '%s'!\n", datFileName);
         fclose(fTxt);
-        return 0; // Thất bại
+        return 0;
     }
 
     Book temp;
+    char line[256];
     int count = 0;
-    char buffer[256];
 
-    // 2. Đọc từng sách từ file TXT
-    while (fscanf(fTxt, "%d\n", &temp.id) == 1) {
-        // Đọc Tên sách
+    // Đọc từng dòng ID
+    while (fgets(line, sizeof(line), fTxt) != NULL) {
+        // 1. Lấy ID
+        line[strcspn(line, "\r\n")] = 0; // Xóa \n
+        if (strlen(line) == 0) continue;  // Bỏ qua dòng trống nếu có
+        temp.id = atoi(line);            // Chuyển chuỗi thành số nguyên ID
+
+        // 2. Lấy Tên sách
         if (fgets(temp.title, sizeof(temp.title), fTxt) != NULL) {
-            temp.title[strcspn(temp.title, "\r\n")] = 0; // Xóa ký tự xuống dòng
+            temp.title[strcspn(temp.title, "\r\n")] = 0;
         }
 
-        // Đọc Tác giả
+        // 3. Lấy Tác giả
         if (fgets(temp.author, sizeof(temp.author), fTxt) != NULL) {
-            temp.author[strcspn(temp.author, "\r\n")] = 0; // Xóa ký tự xuống dòng
+            temp.author[strcspn(temp.author, "\r\n")] = 0;
         }
 
-        // Đọc Năm xuất bản
-        fscanf(fTxt, "%d\n", &temp.year);
+        // 4. Lấy Năm xuất bản
+        if (fgets(line, sizeof(line), fTxt) != NULL) {
+            line[strcspn(line, "\r\n")] = 0;
+            temp.year = atoi(line);       // Chuyển chuỗi thành số nguyên Year
+        }
 
-        // Mặc định trạng thái sách khi import vào là AVAILABLE (Sẵn có)
+        // 5. Trạng thái mặc định
         temp.status = AVAILABLE;
 
-        // 3. Ghi trực tiếp struct vào file nhị phân .dat bằng fwrite
+        // Ghi struct vào file .dat
         fwrite(&temp, sizeof(Book), 1, fDat);
         count++;
     }
 
-    // 4. Đóng cả 2 file sau khi hoàn tất
     fclose(fTxt);
     fclose(fDat);
 
-    printf(">> Đã chuyển đổi thành công %d cuốn sách từ '%s' sang '%s'!\n", count, txtFileName, datFileName);
-    return 1; // Thành công
+    printf(">> [Thành công] Đã chuyển trọn vẹn %d cuốn sách sang '%s'!\n", count, datFileName);
+    return 1;
 }
 
 // HÀM: readBook
@@ -122,10 +127,8 @@ Tree insertbook(Book x, Tree Root) {
         else if((x.id < Root->data.id) ){
             Root->left = insertbook(x, Root->left);
         }
-        else{
-            return Root;
-        }
     }
+    return Root;
 }
 
 // HÀM: lood_database
@@ -134,11 +137,17 @@ Tree insertbook(Book x, Tree Root) {
 Tree lood_database() {
     Tree result = NULL;
     FILE* f = fopen("database.dat", "rb");
-    Book temp;
-    while(fread(&temp, sizeof(Book), 1, f) == 1) {
+    if (f != NULL) {
+        Book temp;
+        while(fread(&temp, sizeof(Book), 1, f) == 1) {
         result = insertbook(temp, result);
+        } 
+        fclose(f);
     }
-    fclose(f);
+    else {
+        convertTxtToDat("database.txt", "database.dat");
+        result = lood_database();
+    }
     return result;
 }
 
@@ -146,8 +155,7 @@ Tree lood_database() {
 void display_tree(Tree thu_vien) {
     if (thu_vien != NULL) {
         display_tree(thu_vien->left);
-        char* statusStr = (thu_vien->data.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
-        printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
+        char* statusStr = (thu_vien->data.status == AVAILABLE) ? "Trong kho san sang" : "Dang muon";
         printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
             thu_vien->data.id, thu_vien->data.title, thu_vien->data.author, thu_vien->data.year, statusStr);
         display_tree(thu_vien->right);
@@ -178,7 +186,7 @@ void scanfbook(Book* temp) {
 
 // Ham print Book
 void printbook(Book virtual) {
-    char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
+    char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho san sang" : "Dang muon";
     printf("=================== THONG TIN SACH TRONG THU VIEN KAT=============================\n");
     printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
         virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
@@ -268,7 +276,6 @@ void change_inf_book(Tree thu_vien) {
         printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
             virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
     }
-    save_database(thu_vien);
 }
 
 // HÀM BỔ TRỢ: Tìm Node có giá trị ID nhỏ nhất (nằm ngoài cùng bên trái của cây/phân nhánh)
