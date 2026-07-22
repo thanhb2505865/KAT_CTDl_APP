@@ -6,6 +6,7 @@
 
 
 int main() {
+    convertTxtToDat("database.txt", "database.dat");
     Tree thu_vien = lood_database(); // Nạp dữ liệu từ database.dat lên cây
     int currentChoice = 0;
     int key;

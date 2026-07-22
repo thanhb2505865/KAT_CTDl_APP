@@ -76,6 +76,7 @@ int convertTxtToDat(const char *txtFileName, const char *datFileName) {
     printf(">> Đã chuyển đổi thành công %d cuốn sách từ '%s' sang '%s'!\n", count, txtFileName, datFileName);
     return 1; // Thành công
 }
+
 // HÀM: readBook
 // Tham số: Tree T, FILE* f;
 // Mục đích: Đem dữ liệu từ cây trả về file 
@@ -267,6 +268,7 @@ void change_inf_book(Tree thu_vien) {
         printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
             virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
     }
+    save_database(thu_vien);
 }
 
 // HÀM BỔ TRỢ: Tìm Node có giá trị ID nhỏ nhất (nằm ngoài cùng bên trái của cây/phân nhánh)
@@ -320,6 +322,7 @@ Tree deleteBook(int id, Tree Root) {
         // Xóa node thế chỗ cũ ở nhánh phải
         Root->right = deleteBook(temp->data.id, Root->right);
     }
+
     return Root;
 }
 

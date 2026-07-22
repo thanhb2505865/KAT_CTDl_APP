@@ -1,0 +1,220 @@
+1
+To Kill a Mockingbird
+Harper Lee
+1960
+2
+1984
+George Orwell
+1949
+3
+The Great Gatsby
+F. Scott Fitzgerald
+1925
+4
+Pride and Prejudice
+Jane Austen
+1813
+5
+The Catcher in the Rye
+J.D. Salinger
+1951
+6
+The Hobbit
+J.R.R. Tolkien
+1937
+7
+Fahrenheit 451
+Ray Bradbury
+1953
+8
+Jane Eyre
+Charlotte Brontë
+1847
+9
+Animal Farm
+George Orwell
+1945
+10
+Brave New World
+Aldous Huxley
+1932
+11
+The Lord of the Rings
+J.R.R. Tolkien
+1954
+12
+Crime and Punishment
+Fyodor Dostoevsky
+1866
+13
+Wuthering Heights
+Emily Brontë
+1847
+14
+The Grapes of Wrath
+John Steinbeck
+1939
+15
+One Hundred Years of Solitude
+Gabriel García Márquez
+1967
+16
+The Odyssey
+Homer
+-800
+17
+The Little Prince
+Antoine de Saint-Exupéry
+1943
+18
+Moby-Dick
+Herman Melville
+1851
+19
+Frankenstein
+Mary Shelley
+1818
+20
+The Brothers Karamazov
+Fyodor Dostoevsky
+1880
+21
+Slaughterhouse-Five
+Kurt Vonnegut
+1969
+22
+The Alchemist
+Paulo Coelho
+1988
+23
+The Catch-22
+Joseph Heller
+1961
+24
+The Picture of Dorian Gray
+Oscar Wilde
+1890
+25
+The Count of Monte Cristo
+Alexandre Dumas
+1844
+26
+The Metamorphosis
+Franz Kafka
+1915
+27
+Beloved
+Toni Morrison
+1987
+28
+Don Quixote
+Miguel de Cervantes
+1605
+29
+The Old Man and the Sea
+Ernest Hemingway
+1952
+30
+Anna Karenina
+Leo Tolstoy
+1877
+31
+War and Peace
+Leo Tolstoy
+1869
+32
+The Sound and the Fury
+William Faulkner
+1929
+33
+Les Misérables
+Victor Hugo
+1862
+34
+Dracula
+Bram Stoker
+1897
+35
+A Tale of Two Cities
+Charles Dickens
+1859
+36
+Great Expectations
+Charles Dickens
+1861
+37
+The Stranger
+Albert Camus
+1942
+38
+Heart of Darkness
+Joseph Conrad
+1899
+39
+The Master and Margarita
+Mikhail Bulgakov
+1967
+40
+Lolita
+Vladimir Nabokov
+1955
+41
+Of Mice and Men
+John Steinbeck
+1937
+42
+Clockwork Orange
+Anthony Burgess
+1962
+43
+Dune
+Frank Herbert
+1965
+44
+The Shining
+Stephen King
+1977
+45
+The Sun Also Rises
+Ernest Hemingway
+1926
+46
+Things Fall Apart
+Chinua Achebe
+1958
+47
+Memoirs of a Geisha
+Arthur Golden
+1997
+48
+Kite Runner
+Khaled Hosseini
+2003
+49
+Life of Pi
+Yann Martel
+2001
+50
+The Book Thief
+Markus Zusak
+2005
+51
+The Name of the Rose
+Umberto Eco
+1980
+52
+Night
+Elie Wiesel
+1956
+53
+Midnight's Children
+Salman Rushdie
+1981
+54
+Invisible Man
+Ralph Ellison
+1952
+55
+In Cold Blood
+Truman Capote
+1966
