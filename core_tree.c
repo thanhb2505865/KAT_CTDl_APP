@@ -25,12 +25,36 @@ struct Node{
 };
 
 typedef struct Node* Tree;
+
 // 22/7 
 // Khiet kiem du lieu dau vao kiểu .dat => Bắt buộc phải có hàm xuất file vì không đọc chay file gốc đc  tên: database.dat.
 // Khiet làm 2 hàm xóa, tạo(book) để cho A bin thêm vô 
 // Thanh làm tìm kiếm, load_database, save_database
 // Bin viết ham xuất file, thêm Tree
 
+// HÀM: readBook
+// Tham số: Tree T, FILE* f;
+// Mục đích: Đem dữ liệu từ cây trả về file 
+void readBook(Tree T, FILE* f) {
+    if(T == NULL) return;
+    else {
+        fwrite(&T->data, sizeof(Book), 1, f);
+        readBook(T->left, f);
+        readBook(T->right, f);
+    }
+}
+
+// HÀM: save_database
+// Tham số: Tree T
+// Mục đích: Đem dữ liệu từ Tree T trả về cho file database.dat
+void save_database(Tree T) {
+    FILE* f = fopen("database.dat", "wb");
+    if(T == NULL) return;
+    else {
+        readBook(T, f);
+    }
+    fclose(f);
+}
 
 // HÀM: insertbook
 // Tham số: Book x, Tree Root
@@ -57,25 +81,8 @@ Tree insertbook(Book x, Tree Root) {
         }
     }
 }
-
-
-// HÀM: readBook
-// Tham số: Tree T
-//        : FILE* f
-// Mục đích: Ghi lại giá trị của từng Node Book được duyệt theo tiền tự của cây tránh việc khi sắp dữ liệu file lên cây trên Ram thành cây liên kết 
-void readBook(Tree T, FILE* f) {
-    if(T == NULL) return;
-    else {
-        fwrite(&T->data, sizeof(Book), 1, f);
-        readBook(T->left, f);
-        readBook(T->right, f);
-    }
-}
-
-
-
 // HÀM: lood_database
-// Mục đích: Duyệt từ file để lấy từ Book làm nguồn cho hàm insertbook để trả về cây
+// Mục đích: Đem dữ liệu từ file dựng thành cây trên Ram
 // Đầu ra: Tree result sao khi dữ liệu trên file được đọc đưa lên cây
 Tree lood_database() {
     Tree result = NULL;
@@ -88,20 +95,54 @@ Tree lood_database() {
     return result;
 }
 
-// HÀM: save_database
-// Tham số: Tree T
-// Mục đích: Đem dữ liệu từ Tree T trả về cho file
-// Đầu ra: Tree result sao khi dữ liệu trên file được đọc đưa lên cây
-void save_database(Tree T) {
-    FILE* f = fopen("database.dat", "wb");
-    if(T == NULL) return;
-    else {
-        readBook(T, f);
+// Hàm duyệt cây in ra màn hình 
+void display_tree(Tree thu_vien) {
+    if (thu_vien != NULL) {
+        display_tree(thu_vien->left);
+        char* statusStr = (thu_vien->data.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
+        printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
+        printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
+            thu_vien->data.id, thu_vien->data.title, thu_vien->data.author, thu_vien->data.year, statusStr);
+        display_tree(thu_vien->right);
     }
-    fclose(f);
 }
 
+// Hàm xóa bộ nhớ đệm (tránh lỗi trôi lệnh khi dùng scanf xong dùng fgets)
+void clear_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
 
+// Ham doc Book
+void readbook(Book* temp) {
+    printf("Nhap ID (Ma sach): "); 
+    scanf("%d", &temp->id);
+    clear_buffer(); 
+    printf("Nhap ten sach: "); 
+    fgets(temp->title, 100, stdin); 
+    temp->title[strcspn(temp->title, "\n")] = 0;
+    printf("Nhap tac gia: "); 
+    fgets(temp->author, 50, stdin); 
+    temp->author[strcspn(temp->author, "\n")] = 0;
+    printf("Nhap nam xuat ban: "); 
+    scanf("%d", &temp->year);
+    temp->status = AVAILABLE;
+}
+
+// HÀM: insertnode
+// Tham số: Book x, Tree Root
+// Mục đích: 
+// Đầu ra:
+Tree insertnode(Tree thu_vien) { // Thieu ne a bin phai kiem truoc khi them 
+    Book b;
+    printf("\n--- NHAP THONG TIN SACH MOI ---\n");
+    readbook(&b);
+    thu_vien = insertbook(b, thu_vien);
+    printf(">> Da them sach '%s' vao he thong thanh cong!\n", b.title);
+    return thu_vien;
+}
+
+// Ham tim kiem tra id Book 
 Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh chua hieu ham search
     if (Root == NULL) return NULL; // Truong hop tim khong thay x
     else {
@@ -110,14 +151,70 @@ Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh
         }
         else {
             if(x > Root->data.id) {
-                return Search(x, Root->right);
+                return search_id(x, Root->right);
             }
             else if (x < Root->data.id) {
-                return Search(x, Root->left);
+                return search_id(x, Root->left);
             }
         }
     }
 }
+
+// Hàm trả về trạng thái của sách. Chưa mượn trả về 1; Đã mượn trả về 0
+int search_status(Tree T) {
+    return T->data.status == AVAILABLE;
+}
+
+// HÀM: search
+// Mục đích: Tìm và in ra Book 
+void search() {
+    int x;
+    scanf(" %d", &x);
+    Tree result = lood_database();
+    Tree test = search_id(x, result);
+    if (test == NULL) {
+        printf("Không tìm thấy cuốn sách có mã số ID");
+        return;
+    }
+    else {
+        if(search_status(test)) {
+            printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
+            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("----------------------------------------------------------------------------------\n");
+            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Trong kho sẵn sàng");
+        }
+        else {
+            printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
+            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("----------------------------------------------------------------------------------\n");
+            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Đang mượn");
+        }
+    }
+}
+
+// HÀM: change_inf_book
+// Tham số: Tree thu_vien
+// Mục đích: Thay doi cac thong tin cua Book trong Thu vien
+void change_inf_book(Tree thu_vien) {
+    Book virtual;
+    printf("Nhap ID (Ma sach) ban muon thay doi: ");
+    int temp;
+    scanf("%d", &temp);
+    Tree search = search_id(temp, thu_vien);
+    if (search == NULL) {
+        printf("Không tìm thấy cuốn sách có mã số ID\n");
+    }
+    else {
+        readbook(&virtual);
+        thu_vien = insertbook(virtual, thu_vien);
+        printf("Cap nhat du lieu sach thanh cong\n");
+        char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
+        printf("=================== THONG TIN SACH SAU KHI CAP NHAT TRONG THU VIEN KAT=============================\n");
+        printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
+            virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
+    }
+}
+
 // HÀM BỔ TRỢ: Tìm Node có giá trị ID nhỏ nhất (nằm ngoài cùng bên trái của cây/phân nhánh)
 Tree findMin(Tree Root) {
     if (Root == NULL) return NULL;
@@ -171,72 +268,6 @@ Tree deleteBook(int id, Tree Root) {
     }
 
     return Root;
-}
-// Hàm trả về trạng thái của sách. Chưa mượn trả về 1; Đã mượn trả về 0
-int search_status(Tree T) {
-    return T->data.status == AVAILABLE;
-}
-
-void search() {
-    int x;
-    printf("Vui lòng nhập id cuốn sách bạn tìm kiếm: ");
-    scanf(" %d", &x);
-    Tree result = lood_database();
-    Tree test = search_id(x, result);
-    if (test == NULL) {
-        printf("Không tìm thấy cuốn sách có mã số ID");
-    }
-    else {
-        if(search_status(test)) {
-            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
-            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
-            printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Trong kho sẵn sàng");
-        }
-        else {
-            printf("=================== DANH SACH SACH CO TRONG THU VIEN =============================\n");
-            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
-            printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.author, test->data.year, "Đang mượn");
-        }
-    }
-}
-
-// Hàm duyệt cây in ra màn hình 
-void display_tree(Tree T) {
-    if (T != NULL) {
-        display_tree(T->left);
-        char* statusStr = (T->data.status == AVAILABLE) ? "San sang" : "Dang muon";
-        printf("%-5d | %-25s | %-18s | %-6d | %-10s\n", 
-               T->data.id, T->data.title, T->data.author, T->data.year, statusStr);
-        display_tree(T->right);
-    }
-}
-
-// Hàm xóa bộ nhớ đệm (tránh lỗi trôi lệnh khi dùng scanf xong dùng fgets)
-void clear_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-Tree them_sach_moi(Tree thu_vien) {
-    Book b;
-    printf("\n--- NHAP THONG TIN SACH MOI ---\n");
-    
-    printf("Nhap ID (Ma sach): "); 
-    scanf("%d", &b.id);
-    clear_buffer(); 
-    printf("Nhap ten sach: "); 
-    fgets(b.title, 100, stdin); 
-    b.title[strcspn(b.title, "\n")] = 0;
-    printf("Nhap tac gia: "); 
-    fgets(b.author, 50, stdin); 
-    b.author[strcspn(b.author, "\n")] = 0;
-    printf("Nhap nam xuat ban: "); 
-    scanf("%d", &b.year);
-    thu_vien = insertbook(b, thu_vien);
-    printf(">> Da them sach '%s' vao he thong thanh cong!\n", b.title);
-    return thu_vien;
 }
 
 // Hàm đệ quy duyệt cây Trung Tự (Trái - Gốc - Phải)
