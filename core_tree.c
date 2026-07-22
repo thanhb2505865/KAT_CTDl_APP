@@ -114,7 +114,7 @@ void clear_buffer() {
 }
 
 // Ham doc Book
-void readbook(Book* temp) {
+void scanfbook(Book* temp) {
     printf("Nhap ID (Ma sach): "); 
     scanf("%d", &temp->id);
     clear_buffer(); 
@@ -129,6 +129,14 @@ void readbook(Book* temp) {
     temp->status = AVAILABLE;
 }
 
+// Ham print Book
+void printbook(Book virtual) {
+    char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
+    printf("=================== THONG TIN SACH TRONG THU VIEN KAT=============================\n");
+    printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
+        virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
+}
+
 // HÀM: insertnode
 // Tham số: Book x, Tree Root
 // Mục đích: 
@@ -136,7 +144,7 @@ void readbook(Book* temp) {
 Tree insertnode(Tree thu_vien) { // Thieu ne a bin phai kiem truoc khi them 
     Book b;
     printf("\n--- NHAP THONG TIN SACH MOI ---\n");
-    readbook(&b);
+    scanfbook(&b);
     thu_vien = insertbook(b, thu_vien);
     printf(">> Da them sach '%s' vao he thong thanh cong!\n", b.title);
     return thu_vien;
@@ -213,6 +221,7 @@ void change_inf_book(Tree thu_vien) {
         printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
             virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
     }
+    save_database(thu_vien);
 }
 
 // HÀM BỔ TRỢ: Tìm Node có giá trị ID nhỏ nhất (nằm ngoài cùng bên trái của cây/phân nhánh)
