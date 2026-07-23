@@ -181,6 +181,7 @@ void scanfbook(Book* temp) {
     temp->author[strcspn(temp->author, "\n")] = 0;
     printf("Nhap nam xuat ban: "); 
     scanf("%d", &temp->year);
+    clear_buffer();
     temp->status = AVAILABLE;
 }
 
@@ -190,19 +191,6 @@ void printbook(Book virtual) {
     printf("=================== THONG TIN SACH TRONG THU VIEN KAT=============================\n");
     printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", 
         virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
-}
-
-// HÀM: insertnode
-// Tham số: Book x, Tree Root
-// Mục đích: 
-// Đầu ra:
-Tree insertnode(Tree thu_vien) { // Thieu ne a bin phai kiem truoc khi them 
-    Book b;
-    printf("\n--- NHAP THONG TIN SACH MOI ---\n");
-    scanfbook(&b);
-    thu_vien = insertbook(b, thu_vien);
-    printf(">> Da them sach '%s' vao he thong thanh cong!\n", b.title);
-    return thu_vien;
 }
 
 // Ham tim kiem tra id Book 
@@ -222,6 +210,24 @@ Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh
         }
     }
 }
+
+// HÀM: insertnode
+// Tham số: Book x, Tree Root
+// Mục đích: 
+// Đầu ra:
+Tree insertnode(Tree thu_vien) { 
+    Book b;
+    printf("\n--- NHAP THONG TIN SACH MOI ---\n");
+    scanfbook(&b);
+    if (search_id(b.id, thu_vien) != NULL) {
+        printf(">> [LOI] Sach co ID %d da ton tai! Khong the them trung ID.\n", b.id);
+        return thu_vien; 
+    }
+    thu_vien = insertbook(b, thu_vien);
+    printf(">> Da them sach '%s' (ID: %d) vao he thong thanh cong!\n", b.title, b.id);
+    return thu_vien;
+}
+
 
 // Hàm trả về trạng thái của sách. Chưa mượn trả về 1; Đã mượn trả về 0
 int search_status(Tree T) {
