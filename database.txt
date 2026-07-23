@@ -56,15 +56,15 @@ John Steinbeck
 1939
 15
 One Hundred Years of Solitude
-Gabriel García Márquez
+Gabriel Garcia Marquez
 1967
 16
 The Odyssey
 Homer
--800
+1980
 17
 The Little Prince
-Antoine de Saint-Exupéry
+Antoine de Saint-Exupery
 1943
 18
 Moby-Dick
@@ -87,7 +87,7 @@ The Alchemist
 Paulo Coelho
 1988
 23
-The Catch-22
+The Catch
 Joseph Heller
 1961
 24

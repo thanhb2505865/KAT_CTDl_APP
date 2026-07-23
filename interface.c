@@ -44,7 +44,7 @@ void drawMenu(int currentChoice) {
     
     setColor(11, 0); // Màu xanh dương nhạt cho tiêu đề
     printf("\n ==================================================================================\n");
-    printf("     HE THONG QUAN LY THU VIEN KAT XIN CHAO\n");
+    printf("                      HE THONG QUAN LY THU VIEN KAT XIN CHAO\n");
     printf(" ===================================================================================\n");
     
     setColor(10, 0); // Màu xanh lá cho trạng thái

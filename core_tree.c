@@ -29,13 +29,13 @@ typedef struct Node* Tree;
 int convertTxtToDat(const char *txtFileName, const char *datFileName) {
     FILE *fTxt = fopen(txtFileName, "r");
     if (fTxt == NULL) {
-        printf("[X] Lỗi: Không mở được file '%s'!\n", txtFileName);
+        printf("[X] Loi: Khong mo đuoc file '%s'!\n", txtFileName);
         return 0;
     }
 
     FILE *fDat = fopen(datFileName, "wb");
     if (fDat == NULL) {
-        printf("[X] Lỗi: Không tạo được file '%s'!\n", datFileName);
+        printf("[X] Loi: Khong tao đuoc file '%s'!\n", datFileName);
         fclose(fTxt);
         return 0;
     }
@@ -78,7 +78,7 @@ int convertTxtToDat(const char *txtFileName, const char *datFileName) {
     fclose(fTxt);
     fclose(fDat);
 
-    printf(">> [Thành công] Đã chuyển trọn vẹn %d cuốn sách sang '%s'!\n", count, datFileName);
+    printf(">> [Thanh cong] Đa chuyen tron ven %d cuon sach sang '%s'!\n", count, datFileName);
     return 1;
 }
 
@@ -156,7 +156,7 @@ void display_tree(Tree thu_vien) {
     if (thu_vien != NULL) {
         display_tree(thu_vien->left);
         char* statusStr = (thu_vien->data.status == AVAILABLE) ? "Trong kho san sang" : "Dang muon";
-        printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
+        printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", 
             thu_vien->data.id, thu_vien->data.title, thu_vien->data.author, thu_vien->data.year, statusStr);
         display_tree(thu_vien->right);
     }
@@ -188,7 +188,7 @@ void scanfbook(Book* temp) {
 void printbook(Book virtual) {
     char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho san sang" : "Dang muon";
     printf("=================== THONG TIN SACH TRONG THU VIEN KAT=============================\n");
-    printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
+    printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", 
         virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
 }
 
@@ -242,15 +242,15 @@ void search() {
     else {
         if(search_status(test)) {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
-            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
             printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Trong kho sẵn sàng");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Trong kho sẵn sàng");
         }
         else {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
-            printf("%-5s | %-25s | %-18s | %-10s | %-10s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
             printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Đang mượn");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Đang mượn");
         }
     }
 }
@@ -265,13 +265,22 @@ void change_inf_book(Tree thu_vien) {
     scanf("%d", &temp);
     Tree search = search_id(temp, thu_vien);
     if (search == NULL) {
-        printf("Không tìm thấy cuốn sách có mã số ID\n");
+        printf("Khong tim thay cuan sach ca ma so ID\n");
     }
     else {
-        scanfbook(&virtual);
-        thu_vien = insertbook(virtual, thu_vien);
+        virtual.id = 0;
+        printf("Nhap ten sach: "); 
+        fgets(virtual.title, 100, stdin); 
+        virtual.title[strcspn(virtual.title, "\n")] = 0;
+        printf("Nhap tac gia: "); 
+        fgets(virtual.author, 50, stdin); 
+        virtual.author[strcspn(virtual.author, "\n")] = 0;
+        printf("Nhap nam xuat ban: "); 
+        scanf("%d", &virtual.year);
+        virtual.status = AVAILABLE;
+        search->data = virtual;
         printf("Cap nhat du lieu sach thanh cong\n");
-        char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho sẵn sàng" : "Dang muon";
+        char* statusStr = (virtual.status == AVAILABLE) ? "Trong kho san sang" : "Dang muon";
         printf("=================== THONG TIN SACH SAU KHI CAP NHAT TRONG THU VIEN KAT=============================\n");
         printf("%-5d | %-25s | %-18s | %-10d | %-10s\n", 
             virtual.id, virtual.title, virtual.author, virtual.year, statusStr);
