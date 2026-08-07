@@ -37,7 +37,6 @@ int main() {
                 case 2: //2. Them sach moi vao he thong
                     printf("\n--- CHUC NANG: THEM SACH MOI ---\n\n");
                     thu_vien = insertnode(thu_vien);
-                    printf("\n [Thong bao]: Them thanh cong vao file .dat!\n");
                     save_database(thu_vien);
                     break;
 

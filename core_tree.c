@@ -210,7 +210,6 @@ Tree search_id(int x, Tree Root) { //Khong thay tra ve NULL; Tra ve Tree // Minh
         }
     }
 }
-
 // HÀM: insertnode
 // Tham số: Book x, Tree Root
 // Mục đích: 
@@ -225,6 +224,7 @@ Tree insertnode(Tree thu_vien) {
     }
     thu_vien = insertbook(b, thu_vien);
     printf(">> Da them sach '%s' (ID: %d) vao he thong thanh cong!\n", b.title, b.id);
+    printf("\n [Thong bao]: Them thanh cong vao file .dat!\n");
     return thu_vien;
 }
 
