@@ -36,8 +36,10 @@ int main() {
 
                 case 2: //2. Them sach moi vao he thong
                     printf("\n--- CHUC NANG: THEM SACH MOI ---\n\n");
-                    thu_vien = insertnode(thu_vien);
-                    save_database(thu_vien);
+                    if (authenticateAdmin()) { // Đúng mật khẩu mới cho thêm
+                        thu_vien = insertnode(thu_vien);
+                        save_database(thu_vien); 
+                    }
                     break;
 
                 case 3: //3. Tim kiem sach theo Ma ID
@@ -49,28 +51,37 @@ int main() {
 
                 case 4: //4. Sua thong tin sach
                     printf("\n--- CHUC NANG: SUA TEN SACH ---\n\n");
-                    change_inf_book(thu_vien);
-                    save_database(thu_vien);
+                    if (authenticateAdmin()) { // Đúng mật khẩu mới cho sửa
+                        change_inf_book(thu_vien);
+                        save_database(thu_vien);
+                    }
                     break;
 
-                case 5: //5. Xoa sach khoi he thong
+                case 5:{ //5. Xoa sach khoi he thong
                 printf("\n--- CHUC NANG: XOA SACH KHOI HE THONG ---\n\n");
-                int deleteId;
-                printf(" Nhap Ma ID sach can xoa: ");
-                if (scanf("%d", &deleteId) == 1) {
-        // 1. Gọi hàm xóa sách khỏi Cây tìm kiếm nhị phân
-                    thu_vien = deleteBook(deleteId, thu_vien);
-        // 2. Cập nhật lại dữ liệu xuống file database.dat ngay lập tức
-                    save_database(thu_vien);
-                        printf("\n [Thong bao]: Thao tac xoa hoan tat va da cap nhat database.dat!\n");
-                    } else {
-                        printf("\n [Loi]: Ma ID nhap vao khong hop le!\n");}
-                clear_buffer(); // Xóa bộ đệm bàn phím
-                break;
+                if (authenticateAdmin()) { // Đúng mật khẩu mới cho xóa
+                        int deleteId;
+                        printf(" Nhap Ma ID sach can xoa: ");
+                        if (scanf("%d", &deleteId) == 1) {
+                            clear_buffer();
+                            if (search_id(deleteId, thu_vien) != NULL) {
+                                thu_vien = deleteBook(deleteId, thu_vien);
+                                save_database(thu_vien);
+                                printf("\n [Thong bao]: Xoa thanh cong va da cap nhat database.dat!\n");
+                            } else {
+                                printf("\n [Loi]: Khong tim thay sach co ID %d de xoa!\n", deleteId);
+                            }
+                        } else {
+                            printf("\n [Loi]: Ma ID nhap vao khong hop le!\n");
+                            clear_buffer();
+                        }
+                    }
+                    break;
+                }
 
                 case 6:
                     printf("\n  ==================================================\n");
-                    printf("     Cam on ne da su dung app! Dang dong Console... \n");
+                    printf("     Cam on ban da su dung app! Dang dong Console... \n");
                     printf("  ==================================================\n");
                     return 0;
             }
