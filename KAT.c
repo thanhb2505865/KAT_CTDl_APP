@@ -42,14 +42,19 @@ int main() {
                     }
                     break;
 
-                case 3: //3. Tim kiem sach theo Ma ID
+                case 3: //3. Mượn / Trả sách 
+                    printf("\n--- CHUC NANG: MUON / TRA SACH ---\n\n");
+                    borrow_return_book(thu_vien);
+                    break;
+
+                case 4: //4. Tim kiem sach theo Ma ID
                     printf("\n--- CHUC NANG: TIM KIEM SACH ---\n\n");
                     printf(" Nhap Ma ID can tim: ");
                     search();
                     printf("\n [Ket qua]: Tim thay sach!\n");
                     break;
 
-                case 4: //4. Sua thong tin sach
+                case 5: //5. Sua thong tin sach
                     printf("\n--- CHUC NANG: SUA TEN SACH ---\n\n");
                     if (authenticateAdmin()) { // Đúng mật khẩu mới cho sửa
                         change_inf_book(thu_vien);
@@ -57,7 +62,7 @@ int main() {
                     }
                     break;
 
-                case 5:{ //5. Xoa sach khoi he thong
+                case 6:{ //6. Xoa sach khoi he thong
                 printf("\n--- CHUC NANG: XOA SACH KHOI HE THONG ---\n\n");
                 if (authenticateAdmin()) { // Đúng mật khẩu mới cho xóa
                         int deleteId;
@@ -79,9 +84,9 @@ int main() {
                     break;
                 }
 
-                case 6:
+                case 7: //7. Thoat
                     printf("\n  ==================================================\n");
-                    printf("     Cam on ban da su dung app! Dang dong Console... \n");
+                    printf("     Cam on ban da su dung ung dung cua KAT! \n");
                     printf("  ==================================================\n");
                     return 0;
             }
