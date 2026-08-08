@@ -38,7 +38,7 @@ void drawMenu(int currentChoice) {
         "4. Tim kiem sach theo Ma ID",
         "5. Sua thong tin sach",
         "6. Xoa sach khoi he thong",
-        "7. Thoat chuong trinh"
+        "7. Thoat ung dung"
     };
 
     gotoxy(0, 0); // Luôn vẽ đè từ góc trên cùng, tránh dùng system("cls") liên tục gây lag
