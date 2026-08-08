@@ -96,20 +96,31 @@ void inputPassword(char *password, int maxLength) {
     printf("\n");
 }
 
-// Hàm kiểm tra quyền Admin
+// Hàm kiểm tra quyền Admin 
 int authenticateAdmin() {
-    const char ADMIN_PASS[] = "123456"; // MẬT KHẨU CỦA QUẢN LÝ (Có thể thay đổi)
+    const char ADMIN_PASS[] = "123456"; // Mật khẩu Admin mặc định
     char inputPass[50];
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 3;
 
     printf("\n [YEU CAU QUYEN QUAN LY]\n");
-    printf(" Nhap mat khau Admin: ");
-    inputPassword(inputPass, 50);
 
-    if (strcmp(inputPass, ADMIN_PASS) == 0) {
-        printf(" >> XAC THUC THANH CONG! Cho phep truy cap.\n\n");
-        return 1; // Đúng mật khẩu
-    } else {
-        printf(" >> [LOI] Mat khau khong dung! Ban khong co quyen thuc hien thao tac nay.\n");
-        return 0; // Sai mật khẩu
+    while (attempts < MAX_ATTEMPTS) {
+        printf(" Nhap mat khau Admin (Con %d lan thu): ", MAX_ATTEMPTS - attempts);
+        inputPassword(inputPass, 50);
+
+        if (strcmp(inputPass, ADMIN_PASS) == 0) {
+            printf(" >> XAC THUC THANH CONG! Cho phep truy cap.\n\n");
+            return 1; // Nhập đúng mật khẩu
+        } else {
+            attempts++;
+            if (attempts < MAX_ATTEMPTS) {
+                printf(" >> [LOI] Mat khau khong dung! Vui long thu lai.\n\n");
+            }
+        }
     }
+
+    // Nếu đã hết 3 lần thử mà vẫn sai
+    printf("\n >> [CANH BAO] Ban da nhap sai 3 lan! Tu dong quay lai Menu chinh.\n");
+    return 0; // Thất bại
 }
