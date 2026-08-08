@@ -254,13 +254,13 @@ void search() {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
             printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
             printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Trong kho sẵn sàng");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Trong kho san sang");
         }
         else {
             printf("=================== DANH SACH SACH CO TRONG THU VIEN KAT=============================\n");
             printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", "ID", "Ten Sach", "Tac Gia", "Nam XB", "Trang Thai");
             printf("----------------------------------------------------------------------------------\n");
-            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Đang mượn");
+            printf("%-5d | %-30s | %-30s | %-6d | %-18s\n", test->data.id, test->data.title, test->data.author, test->data.year, "Dang muon");
         }
     }
 }
