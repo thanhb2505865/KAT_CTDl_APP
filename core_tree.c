@@ -372,3 +372,69 @@ void export_file(Tree T) {
     fclose(f);
     printf(">> Da xuat/luu toan bo du lieu ra file database.csv!\n");
 }
+
+// Hàm xử lý Mượn / Trả sách tự động
+void borrow_return_book(Tree thu_vien) {
+    if (thu_vien == NULL) {
+        printf(" >> Thu vien hien dang trong!\n");
+        return;
+    }
+
+    int id;
+    printf(" Nhap Ma ID sach: ");
+    if (scanf("%d", &id) != 1) {
+        clear_buffer();
+        printf(" >> [LOI]: Ma ID nhap vao khong hop le!\n");
+        return;
+    }
+    clear_buffer();
+
+    Tree bookNode = search_id(id, thu_vien);
+    if (bookNode == NULL) {
+        printf(" >> [LOI]: Khong tim thay sach co ID %d trong thu vien!\n", id);
+        return;
+    }
+
+    // Hiển thị thông tin sách tìm thấy để xác nhận
+    printf("\n --- THONG TIN SACH --- \n");
+    printf(" Ten sach : %s\n", bookNode->data.title);
+    printf(" Tac gia  : %s\n", bookNode->data.author);
+    printf(" Trang thai: %s\n", (bookNode->data.status == AVAILABLE) ? "Co san trong thu vien" : "Dang duoc muon");
+    printf(" ----------------------\n");
+    printf(" Ban muon thuc hien thao tac gi?\n");
+    printf(" 1. Muon sach\n");
+    printf(" 2. Tra sach\n");
+    printf(" Chon (1 hoac 2): ");
+
+    int action;
+    if (scanf("%d", &action) != 1) {
+        clear_buffer();
+        printf(" >> [LOI]: Lua chon khong hop le!\n");
+        return;
+    }
+    clear_buffer();
+
+    if (action == 1) { // Người dùng chọn MƯỢN SACH
+        if (bookNode->data.status == BORROWED) {
+            // Chặn không cho mượn nếu sách đã bị người khác mượn
+            printf("\n >> [LOI]: Sach '%s' DANG DUOC MUON boi nguoi khac! Ban khong the muon luc nay.\n", bookNode->data.title);
+        } else {
+            bookNode->data.status = BORROWED;
+            save_database(thu_vien);
+            printf("\n >> [THANH CONG]: Ban da MUON thanh cong cuon sach '%s'!\n", bookNode->data.title);
+        }
+    } 
+    else if (action == 2) { // Người dùng chọn TRẢ SÁCH
+        if (bookNode->data.status == AVAILABLE) {
+            // Chặn không cho trả nếu sách vốn đang nằm sẵn trong thư viện
+            printf("\n >> [LOI]: Sach '%s' HIEN CO SAN trong thu vien (chua ai muon) nen khong the tra!\n", bookNode->data.title);
+        } else {
+            bookNode->data.status = AVAILABLE;
+            save_database(thu_vien);
+            printf("\n >> [THANH CONG]: Ban da TRA thanh cong cuon sach '%s'!\n", bookNode->data.title);
+        }
+    } 
+    else {
+        printf("\n >> [LOI]: Lua chon khong hop le! Vui long chon 1 hoac 2.\n");
+    }
+}
