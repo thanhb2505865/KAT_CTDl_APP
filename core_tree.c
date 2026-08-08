@@ -145,8 +145,11 @@ Tree lood_database() {
         fclose(f);
     }
     else {
-        convertTxtToDat("database.txt", "database.dat");
-        result = lood_database();
+        if (convertTxtToDat("database.txt", "database.dat")) {
+            result = lood_database();
+        } else {
+            printf(">> [Thong bao] Khong tim thay 'database.dat' hoac 'database.txt'. Khoi tao cay rong.\n");
+        }
     }
     return result;
 }
@@ -238,6 +241,7 @@ int search_status(Tree T) {
 // Mục đích: Tìm và in ra Book 
 void search() {
     int x;
+    printf("Nhap ID cuon sach ban tim kiem: ");
     scanf(" %d", &x);
     Tree result = lood_database();
     Tree test = search_id(x, result);
