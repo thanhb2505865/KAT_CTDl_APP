@@ -72,3 +72,43 @@ void drawMenu(int currentChoice) {
     printf("   Dung phan phim [Thuong/Dien] de chon, [Enter] de vao.");
     setColor(7, 0);
 }
+
+// Hàm nhập mật khẩu hiển thị dấu *
+void inputPassword(char *password, int maxLength) {
+    int i = 0;
+    char ch;
+    while (1) {
+        ch = getch(); // Đọc từng phím bấm mà không in ra màn hình
+        if (ch == 13) { // Phím ENTER (Xuống dòng) -> Hoàn thành
+            password[i] = '\0';
+            break;
+        } else if (ch == 8) { // Phím BACKSPACE (Xóa ký tự)
+            if (i > 0) {
+                i--;
+                printf("\b \b"); // Xóa 1 dấu * trên màn hình
+            }
+        } else if (ch >= 32 && ch <= 126 && i < maxLength - 1) { // Ký tự in được
+            password[i++] = ch;
+            printf("*"); // Thay ký tự thật bằng dấu *
+        }
+    }
+    printf("\n");
+}
+
+// Hàm kiểm tra quyền Admin
+int authenticateAdmin() {
+    const char ADMIN_PASS[] = "123456"; // MẬT KHẨU CỦA QUẢN LÝ (Có thể thay đổi)
+    char inputPass[50];
+
+    printf("\n [YEU CAU QUYEN QUAN LY]\n");
+    printf(" Nhap mat khau Admin: ");
+    inputPassword(inputPass, 50);
+
+    if (strcmp(inputPass, ADMIN_PASS) == 0) {
+        printf(" >> XAC THUC THANH CONG! Cho phep truy cap.\n\n");
+        return 1; // Đúng mật khẩu
+    } else {
+        printf(" >> [LOI] Mat khau khong dung! Ban khong co quyen thuc hien thao tac nay.\n");
+        return 0; // Sai mật khẩu
+    }
+}
