@@ -84,11 +84,15 @@ int main() {
                     break;
                 }
 
-                case 7: //7. Thoat
+                case 7: //7. Xuat du lieu ra file CSV
+                    printf("\n--- CHUC NANG: XUAT DU LIEU RA FILE CSV ---\n\n");
+                    export_file(thu_vien);
+                    break;
+                case 8: //8. Thoát
                     printf("\n  ==================================================\n");
                     printf("     Cam on ban da su dung ung dung cua KAT! \n");
                     printf("  ==================================================\n");
-                    return 0;
+                    return 0; 
             }
             setColor(8, 0);
             printf("\n\n [Bam phim bat ky de quay lai Menu chinh...]");
