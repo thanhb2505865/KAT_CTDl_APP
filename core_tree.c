@@ -361,16 +361,46 @@ void write_tree_to_file(Tree T, FILE* f) { // Sẽ giống hàm
     }
 }
 
-// Hàm gọi chức năng xuất file
-void export_file(Tree T) {
-    FILE* f = fopen("database.csv", "w");
-    if(f == NULL) {
-        printf("Loi: Khong the tao hoac mo file database.csv!\n");
+// Hàm phụ: Duyệt cây BST (In-Order) và ghi dữ liệu chuẩn định dạng CSV
+void write_tree_to_csv(Tree root, FILE *f) {
+    if (root != NULL) {
+        write_tree_to_csv(root->left, f);
+
+        // Ghi dữ liệu phân cách bằng dấu phẩy ","
+        // Bọc Tên sách & Tác giả trong dấu "" để tránh lỗi nếu tên có chứa dấu phẩy
+        fprintf(f, "%d,\"%s\",\"%s\",%d,%s\n",
+                root->data.id,
+                root->data.title,
+                root->data.author,
+                root->data.year,
+                (root->data.status == AVAILABLE) ? "Co san" : "Dang muon");
+
+        write_tree_to_csv(root->right, f);
+    }
+}
+
+// Hàm chính: Xuất toàn bộ dữ liệu Cây BST ra file database.csv
+void export_file(Tree root) {
+    if (root == NULL) {
+        printf("\n >> [THONG BAO]: Thu vien hien dang trong, khong co du lieu de xuat!\n");
         return;
     }
-    write_tree_to_file(T, f);
+
+    FILE *f = fopen("database.csv", "w");
+    if (f == NULL) {
+        printf("\n >> [LOI]: Khong the tao hoac mo file database.csv!\n");
+        return;
+    }
+
+    // Ghi hàng tiêu đề cột cho Excel
+    fprintf(f, "ID,Ten Sach,Tac Gia,Nam Xuat Ban,Trang Thai\n");
+
+    // Ghi toàn bộ dữ liệu sách
+    write_tree_to_csv(root, f);
+
     fclose(f);
-    printf(">> Da xuat/luu toan bo du lieu ra file database.csv!\n");
+    printf("\n >> [THANH CONG]: Da xuat toan bo du lieu ra file 'database.csv'!\n");
+    printf("    -> Ban co the tim file 'database.csv' trong thu muc project va mo bang Excel.\n");
 }
 
 // Hàm xử lý Mượn / Trả sách tự động
