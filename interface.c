@@ -4,7 +4,7 @@
 #include <windows.h>
 #include<string.h>
 
-#define MAX_OPTIONS 7
+#define MAX_OPTIONS 8
 
 // Hàm di chuyển con trỏ chuột trên Console để vẽ không bị nhấp nháy
 void gotoxy(int x, int y) {
@@ -38,7 +38,8 @@ void drawMenu(int currentChoice) {
         "4. Tim kiem sach theo Ma ID",
         "5. Sua thong tin sach",
         "6. Xoa sach khoi he thong",
-        "7. Thoat ung dung"
+        "7. Xuat du lieu ra file CSV",
+        "8. Thoat chuong trinh"
     };
 
     gotoxy(0, 0); // Luôn vẽ đè từ góc trên cùng, tránh dùng system("cls") liên tục gây lag
