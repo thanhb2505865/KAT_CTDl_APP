@@ -4,10 +4,6 @@
 #include "interface.c"
 #include "core_tree.c"
 
-// Video Bin
-// Word Khiết
-// Thiết kế xử lý các hàm xử lý thêm/xóa/tìm kiếm trên cấu trúc dữ liệu đã cài đặt (mã giả hoặc sơ đồ). Thanh 
-// 8/8
 
 int main() {
     Tree thu_vien = lood_database(); // Nạp dữ liệu từ database.dat lên cây
